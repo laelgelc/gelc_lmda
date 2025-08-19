@@ -1,1 +1,2 @@
-# cl_st2_gelc
+# GELC - Lexical Multi-Dimensional Analysis
+
