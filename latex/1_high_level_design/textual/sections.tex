@@ -1,18 +1,254 @@
 \section{Project Overview}
+\subsection{Purpose}
+This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space (e.g., via PCA/FA/MD analysis), and presents results through interactive visualisations and reports.
+
+\subsection{Scope}
+The application supports:
+\begin{itemize}
+    \item Corpus ingestion from files, folders, and CSV/TSV columns;
+    \item Language-aware preprocessing (tokenisation, lemmatisation, POS tagging);
+    \item Feature extraction (lexical richness, frequency profiles, function/content word ratios, POS n-grams, domain lexicons);
+    \item Dimensionality reduction and factor analysis (e.g., PCA, Exploratory Factor Analysis) to derive interpretable dimensions;
+    \item Interactive exploration (scatter plots, loadings, factor scores), filtering, and labeling;
+    \item Exportable reports (PDF/HTML) and machine-readable outputs (CSV/JSON).
+\end{itemize}
+
+\subsection{Stakeholders}
+\begin{itemize}
+    \item Linguists and corpus analysts;
+    \item Data scientists working on stylistic and register analysis;
+    \item Educators and applied researchers;
+    \item Software maintainers and operations personnel (if deployed as a desktop or server app).
+\end{itemize}
+
+% Optional: include overview diagram if present; path is relative to textual/
+% \input{../diagrams/lexical_md_overview.tex}
 
 \section{Functional Requirements}
+\subsection{Corpus Ingestion}
+\begin{itemize}
+    \item FR-1: Import plain text files, folders, and CSV/TSV with a designated text column;
+    \item FR-2: Detect/allow selection of text encoding (UTF-8 default), handle BOM, and report decoding errors;
+    \item FR-3: Optional metadata import (e.g., author, source, label) to support grouping and filtering.
+\end{itemize}
+
+\subsection{Preprocessing}
+\begin{itemize}
+    \item FR-4: Tokenise, normalise (case, punctuation policies), and sentence-segment texts;
+    \item FR-5: Lemmatise and POS-tag (spaCy models; fallback to NLTK if unavailable);
+    \item FR-6: Language selection and multi-language support; warn if models are missing;
+    \item FR-7: Stopword management (built-in lists and user-defined additions).
+\end{itemize}
+
+\subsection{Feature Extraction}
+\begin{itemize}
+    \item FR-8: Compute lexical richness metrics (TTR, MTLD, Maas, HDD);
+    \item FR-9: Frequency features: word and lemma frequency profiles; function word distributions;
+    \item FR-10: POS and POS n-grams; content/function word ratios; lexical sophistication bands;
+    \item FR-11: Custom feature plug-ins via a documented Python interface.
+\end{itemize}
+
+\subsection{Dimensional Analysis}
+\begin{itemize}
+    \item FR-12: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
+    \item FR-13: Perform dimensionality reduction (PCA) and optional factor analysis (EFA/Varimax);
+    \item FR-14: Compute factor loadings, factor scores, and explained variance;
+    \item FR-15: Save and load trained models/pipelines for reproducibility.
+\end{itemize}
+
+\subsection{Visualisation and GUI}
+\begin{itemize}
+    \item FR-16: Interactive scatter/biplots of documents in 2D/3D factor space with tooltips and labels;
+    \item FR-17: Loading plots, scree plots, and feature contribution charts;
+    \item FR-18: Brushing/filtering by metadata, search, and selection for detailed inspection;
+    \item FR-19: Theming, layout persistence, and session autosave.
+\end{itemize}
+
+\subsection{Export and Reporting}
+\begin{itemize}
+    \item FR-20: Export factor scores, loadings, and projections to CSV/JSON;
+    \item FR-21: Generate PDF/HTML reports with key plots and tables;
+    \item FR-22: Export model artifacts (preprocessing config, feature schema, PCA/FA components).
+\end{itemize}
+
+\subsection{Automation and Scripting}
+\begin{itemize}
+    \item FR-23: Batch processing via CLI and/or headless mode;
+    \item FR-24: Optional REST API for programmatic access (server mode).
+\end{itemize}
 
 \section{Non-Functional Requirements}
+\subsection{Performance}
+\begin{itemize}
+    \item NFR-1: Handle corpora up to 1M tokens on a standard laptop with reasonable latency (\textless 10s for PCA on 10k documents x 1k features, assuming sparse ops);
+    \item NFR-2: Incremental processing and caching to avoid recomputation.
+\end{itemize}
+
+\subsection{Usability}
+\begin{itemize}
+    \item NFR-3: Intuitive GUI with sensible defaults; accessible color schemes;
+    \item NFR-4: Contextual help and onboarding tips; undo/redo for key actions.
+\end{itemize}
+
+\subsection{Reliability and Robustness}
+\begin{itemize}
+    \item NFR-5: Deterministic pipelines when seeds are fixed; versioned model artifacts;
+    \item NFR-6: Error handling with clear diagnostics and recovery suggestions.
+\end{itemize}
+
+\subsection{Portability and Compatibility}
+\begin{itemize}
+    \item NFR-7: Cross-platform support (Windows, macOS, Linux);
+    \item NFR-8: Python 3.10+; packaged with virtualenv/Poetry; optional standalone (PyInstaller).
+\end{itemize}
+
+\subsection{Security}
+\begin{itemize}
+    \item NFR-9: Local-only data processing by default; no data leaves the machine;
+    \item NFR-10: If server mode enabled, enforce TLS and authentication.
+\end{itemize}
 
 \section{System Architecture}
+\subsection{Overview}
+The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modeling, and presentation layers. A central configuration orchestrates reproducible runs; artifacts are persisted for reuse.
+
+% Optional: include analysis diagrams
+% \input{../diagrams/lexical_md_analysis_diagram_1.tex}
+% \input{../diagrams/lexical_md_analysis_diagram_2.tex}
+% \input{../diagrams/md_analysis_diagram_additive.tex}
+
+\subsection{Components}
+\paragraph{GUI Layer}
+Desktop GUI (PySide6/PyQt) for user workflows: project management, corpus loading, configuration, visualisation, and export.
+
+\paragraph{Controller / Orchestration}
+Coordinates pipeline stages, manages state, triggers incremental recomputation when inputs change, and logs provenance.
+
+\paragraph{Preprocessing Service}
+Language detection, sentence segmentation, tokenisation, lemmatisation, POS tagging, stopword filtering; caches normalised representations.
+
+\paragraph{Feature Service}
+Computes metrics and vectorises documents into a DFM with configurable normalisation and weighting; supports plug-ins.
+
+\paragraph{Modeling Service}
+Performs PCA/EFA, computes loadings and scores, applies rotations (e.g., Varimax/Promax), and persists models.
+
+\paragraph{Visualisation Service}
+Generates interactive plots (2D/3D scatter, biplots, scree, loadings) and data tables; supports selections and linked views.
+
+\paragraph{Persistence Layer}
+Stores corpora metadata, preprocessed artifacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
+
+\paragraph{API Layer (Optional)}
+FastAPI-based REST endpoints for batch/remote processing in server mode.
+
+\subsection{Data Flow}
+\begin{enumerate}
+    \item Import corpus $\rightarrow$ normalise text $\rightarrow$ linguistic annotation.
+    \item Extract features $\rightarrow$ construct DFM $\rightarrow$ apply weighting/normalisation.
+    \item Fit PCA/EFA $\rightarrow$ compute scores/loadings $\rightarrow$ store artifacts.
+    \item Visualise and interact $\rightarrow$ export results and reports.
+\end{enumerate}
 
 \section{Technology Stack}
+\begin{itemize}
+    \item Language: Python 3.11 (or 3.10+);
+    \item GUI: PySide6 or PyQt6; alternative: Qt for Python widgets + matplotlib/plotly;
+    \item NLP: spaCy (core models: \texttt{en\_core\_web\_sm/md/lg}), NLTK (fallback, resources), langdetect/fastText for language ID;
+    \item Data: pandas, numpy, scipy (sparse matrices), scikit-learn for PCA, factor analyzers (\texttt{factor\_analyzer}) for EFA/rotations;
+    \item Visualisation: matplotlib, seaborn, plotly; pyqtgraph for fast interactive plots;
+    \item Persistence: SQLite (metadata), parquet/CSV (tables), npz (sparse matrices), joblib/pickle (models), YAML/TOML (config);
+    \item Packaging: Poetry or pip-tools; PyInstaller for desktop bundle; Docker for server mode;
+    \item Testing: pytest, hypothesis for property-based testing, tox/\texttt{nox} for matrix runs;
+    \item CI/CD: GitHub Actions or GitLab CI for tests, linting (ruff, black), and packaging.
+\end{itemize}
 
 \section{Interfaces and APIs}
+\subsection{Python Module Interfaces}
+\begin{itemize}
+    \item \textbf{Preprocessor}: \texttt{process(corpus, config) $\rightarrow$ annotations};
+    \item \textbf{FeatureExtractor}: \texttt{fit\_transform(annotations) $\rightarrow$ DFM}; \texttt{transform(...)};
+    \item \textbf{Modeler}: \texttt{fit(DFM) $\rightarrow$ model}; \texttt{transform(DFM) $\rightarrow$ scores};
+    \item \textbf{Visualiser}: \texttt{plots(scores, loadings, metadata)};
+    \item \textbf{Persistence}: \texttt{save\_artifact(obj, kind)} and \texttt{load\_artifact(kind)}.
+\end{itemize}
+
+\subsection{Plug-in Interface}
+Third-party feature extractors implement \texttt{IFeaturePlugin}:
+\begin{itemize}
+    \item \texttt{schema()} returns feature names and dtypes;
+    \item \texttt{compute(doc)} yields a sparse/compact feature vector;
+    \item Registration via entry points or a plugins folder.
+\end{itemize}
+
+\subsection{CLI}
+\begin{verbatim}
+lmda run --config config.yaml --input corpus/ --output artifacts/
+lmda visualise --project my_project.lmda
+\end{verbatim}
+
+\subsection{Optional REST API (FastAPI)}
+\begin{itemize}
+    \item POST /v1/projects: create project
+    \item POST /v1/projects/{id}/ingest: upload texts/metadata
+    \item POST /v1/projects/{id}/run: execute pipeline
+    \item GET /v1/projects/{id}/scores: factor scores
+    \item GET /v1/projects/{id}/loadings: factor loadings
+    \item GET /v1/projects/{id}/report: PDF/HTML report
+\end{itemize}
 
 \section{Security and Privacy Considerations}
+\subsection{Data Protection}
+\begin{itemize}
+    \item Local-first processing; no external calls by default;
+    \item Optional at-rest encryption for project files; secure temp directories;
+    \item Configurable redaction of personally identifiable information (PII) in exports.
+\end{itemize}
+
+\subsection{Access Control (Server Mode)}
+\begin{itemize}
+    \item Authentication (OAuth2/JWT) and role-based access control (RBAC);
+    \item TLS enforcement; secure headers and CSRF protections for Web GUI (if used).
+\end{itemize}
+
+\subsection{Supply Chain}
+\begin{itemize}
+    \item Pin dependencies; verify wheels; use vulnerability scanning (pip-audit, Safety);
+    \item Sandboxed plug-ins with permission checks.
+\end{itemize}
 
 \section{Risks and Mitigations}
+\begin{itemize}
+    \item \textbf{R1: Model interpretability} — Factors may be hard to interpret. \\
+          \emph{Mitigation}: Offer rotations, feature contribution charts, and glossary tooltips.
+    \item \textbf{R2: Performance on large corpora} — High memory/CPU usage. \\
+          \emph{Mitigation}: Sparse structures, incremental processing, caching, chunked I/O.
+    \item \textbf{R3: NLP model availability} — spaCy models not installed. \\
+          \emph{Mitigation}: Guided download, fallback tokenisers, graceful degradation.
+    \item \textbf{R4: Data privacy} — Sensitive texts accidentally exported. \\
+          \emph{Mitigation}: Local-first defaults, explicit consent prompts, export redaction.
+    \item \textbf{R5: Cross-platform GUI quirks} — Rendering differences. \\
+          \emph{Mitigation}: UI testing matrix, use of Qt styles, theming validation.
+    \item \textbf{R6: Reproducibility drift} — Version changes affect outputs. \\
+          \emph{Mitigation}: Lockfiles, artifact versioning, seeds, environment capture.
+\end{itemize}
 
 \section{Timeline and Milestones}
-
+\begin{enumerate}
+    \item \textbf{Week 1--2: Foundations} \\
+          Project scaffolding, env setup, CI/CD, basic data model, configuration schema;
+    \item \textbf{Week 3--4: Preprocessing} \\
+          Language detection, tokenisation, lemmatisation, POS tagging; caching;
+    \item \textbf{Week 5--6: Features} \\
+          Core lexical metrics, function word profiles, POS n-grams; plug-in API;
+    \item \textbf{Week 7--8: Modeling} \\
+          PCA/EFA pipeline, rotations, persistence; basic CLI;
+    \item \textbf{Week 9--10: GUI v1} \\
+          Data loading, configuration panels, 2D scatter, scree and loadings plots;
+    \item \textbf{Week 11--12: Reporting \& Export} \\
+          CSV/JSON exports, PDF/HTML reports; theming and preferences;
+    \item \textbf{Week 13--14: Hardening} \\
+          Performance tuning, testing, error handling, documentation;
+    \item \textbf{Week 15+: Optional Server Mode} \\
+          FastAPI endpoints, auth/TLS, Docker packaging.
+\end{enumerate}
