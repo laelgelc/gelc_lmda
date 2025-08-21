@@ -1,6 +1,10 @@
 \section{Project Overview}
 \subsection{Purpose}
-This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space (e.g., via PCA/FA/MD analysis), and presents results through interactive visualisations and reports.
+This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) (Figure \ref{fig:lexical_md_analysis}) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space (e.g., via PCA/FA/MD analysis), and presents results through interactive visualisations and reports (Figure \ref{fig:lexical_md_analysis_procedures}).
+
+\import{diagrams/}{md_analysis_diagram_1_lexical.tex}
+
+\import{diagrams/}{md_analysis_diagram_lexical_procedures.tex}
 
 \subsection{Scope}
 The application supports:
@@ -9,7 +13,7 @@ The application supports:
     \item Language-aware preprocessing (tokenisation, lemmatisation, POS tagging);
     \item Feature extraction (lexical richness, frequency profiles, function/content word ratios, POS n-grams, domain lexicons);
     \item Dimensionality reduction and factor analysis (e.g., PCA, Exploratory Factor Analysis) to derive interpretable dimensions;
-    \item Interactive exploration (scatter plots, loadings, factor scores), filtering, and labeling;
+    \item Interactive exploration (scatter plots, loadings, factor scores), filtering, and labelling;
     \item Exportable reports (PDF/HTML) and machine-readable outputs (CSV/JSON).
 \end{itemize}
 
@@ -20,9 +24,6 @@ The application supports:
     \item Educators and applied researchers;
     \item Software maintainers and operations personnel (if deployed as a desktop or server app).
 \end{itemize}
-
-\import{diagrams/}{md_analysis_diagram_1_lexical.tex}
-\import{diagrams/}{md_analysis_diagram_lexical_procedures.tex}
 
 \section{Functional Requirements}
 \subsection{Corpus Ingestion}
@@ -68,7 +69,7 @@ The application supports:
 \begin{itemize}
     \item FR-20: Export factor scores, loadings, and projections to CSV/JSON;
     \item FR-21: Generate PDF/HTML reports with key plots and tables;
-    \item FR-22: Export model artifacts (preprocessing config, feature schema, PCA/FA components).
+    \item FR-22: Export model artefacts (preprocessing config, feature schema, PCA/FA components).
 \end{itemize}
 
 \subsection{Automation and Scripting}
@@ -105,12 +106,12 @@ The application supports:
 \subsection{Security}
 \begin{itemize}
     \item NFR-9: Local-only data processing by default; no data leaves the machine;
-    \item NFR-10: If server mode enabled, enforce TLS and authentication.
+    \item NFR-10: If server mode is enabled, enforce TLS and authentication.
 \end{itemize}
 
 \section{System Architecture}
 \subsection{Overview}
-The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modeling, and presentation layers. A central configuration orchestrates reproducible runs; artifacts are persisted for reuse.
+The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modelling, and presentation layers. A central configuration orchestrates reproducible runs; artefacts are persisted for reuse.
 
 % Optional: include analysis diagrams
 % \input{../diagrams/md_analysis_diagram_1_lexical.tex}
@@ -137,7 +138,7 @@ Performs PCA/EFA, computes loadings and scores, applies rotations (e.g., Varimax
 Generates interactive plots (2D/3D scatter, biplots, scree, loadings) and data tables; supports selections and linked views.
 
 \paragraph{Persistence Layer}
-Stores corpora metadata, preprocessed artifacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
+Stores corpora metadata, preprocessed artefacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
 
 \paragraph{API Layer (Optional)}
 FastAPI-based REST endpoints for batch/remote processing in server mode.
@@ -155,7 +156,7 @@ FastAPI-based REST endpoints for batch/remote processing in server mode.
     \item Language: Python 3.11 (or 3.10+);
     \item GUI: PySide6 or PyQt6; alternative: Qt for Python widgets + matplotlib/plotly;
     \item NLP: spaCy (core models: \texttt{en\_core\_web\_sm/md/lg}), NLTK (fallback, resources), langdetect/fastText for language ID;
-    \item Data: pandas, numpy, scipy (sparse matrices), scikit-learn for PCA, factor analyzers (\texttt{factor\_analyzer}) for EFA/rotations;
+    \item Data: pandas, numpy, scipy (sparse matrices), scikit-learn for PCA, factor analysers (\texttt{factor\_analyzer}) for EFA/rotations;
     \item Visualisation: matplotlib, seaborn, plotly; pyqtgraph for fast interactive plots;
     \item Persistence: SQLite (metadata), parquet/CSV (tables), npz (sparse matrices), joblib/pickle (models), YAML/TOML (config);
     \item Packaging: Poetry or pip-tools; PyInstaller for desktop bundle; Docker for server mode;
@@ -230,7 +231,7 @@ lmda visualise --project my_project.lmda
     \item \textbf{R5: Cross-platform GUI quirks} — Rendering differences. \\
           \emph{Mitigation}: UI testing matrix, use of Qt styles, theming validation.
     \item \textbf{R6: Reproducibility drift} — Version changes affect outputs. \\
-          \emph{Mitigation}: Lockfiles, artifact versioning, seeds, environment capture.
+          \emph{Mitigation}: Lockfiles, artefact versioning, seeds, environment capture.
 \end{itemize}
 
 \section{Timeline and Milestones}
@@ -248,7 +249,7 @@ lmda visualise --project my_project.lmda
     \item \textbf{Week 11--12: Reporting \& Export} \\
           CSV/JSON exports, PDF/HTML reports; theming and preferences;
     \item \textbf{Week 13--14: Hardening} \\
-          Performance tuning, testing, error handling, documentation;
+          Performance tuning, testing, error handling, and documentation;
     \item \textbf{Week 15+: Optional Server Mode} \\
           FastAPI endpoints, auth/TLS, Docker packaging.
 \end{enumerate}
