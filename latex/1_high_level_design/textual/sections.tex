@@ -1,20 +1,22 @@
 \section{Project Overview}
 \subsection{Purpose}
-This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) (Figure \ref{fig:lexical_md_analysis}) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space (e.g., via PCA/FA/MD analysis), and presents results through interactive visualisations and reports (Figure \ref{fig:lexical_md_analysis_procedures}).
+This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) (Figure \ref{fig:lexical_md_analysis}) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space via Factor Analysis (FA), and presents results through interactive visualisations and reports (Figures \ref{fig:lexical_md_analysis_procedures} and \ref{fig:from_text_to_factor}).
 
-\import{diagrams/}{md_analysis_diagram_1_lexical.tex}
+\import{diagrams/}{md_analysis_diagram_1_lexical}
 
-\import{diagrams/}{md_analysis_diagram_lexical_procedures.tex}
+\import{diagrams/}{md_analysis_diagram_lexical_procedures}
+
+\import{diagrams/}{from_text_to_factor}
 
 \subsection{Scope}
 The application supports:
 \begin{itemize}
-    \item Corpus ingestion from files, folders, and CSV/TSV columns;
+    \item Corpus ingestion from files, folders, and CSV/TSV and JSONL columns;
     \item Language-aware preprocessing (tokenisation, lemmatisation, POS tagging);
     \item Feature extraction (lexical richness, frequency profiles, function/content word ratios, POS n-grams, domain lexicons);
-    \item Dimensionality reduction and factor analysis (e.g., PCA, Exploratory Factor Analysis) to derive interpretable dimensions;
+    \item Dimensionality reduction via Factor Analysis to derive interpretable dimensions;
     \item Interactive exploration (scatter plots, loadings, factor scores), filtering, and labelling;
-    \item Exportable reports (PDF/HTML) and machine-readable outputs (CSV/JSON).
+    \item Exportable reports (PDF/HTML) and machine-readable outputs (CSV/TSV/JSON/JSONL).
 \end{itemize}
 
 \subsection{Stakeholders}
@@ -28,8 +30,8 @@ The application supports:
 \section{Functional Requirements}
 \subsection{Corpus Ingestion}
 \begin{itemize}
-    \item FR-1: Import plain text files, folders, and CSV/TSV with a designated text column;
-    \item FR-2: Detect/allow selection of text encoding (UTF-8 default), handle BOM, and report decoding errors;
+    \item FR-1: Import plain text files, folders, and CSV/TSV and JSONL with a designated text column;
+    \item FR-2: Detect/allow selection of text encoding (UTF-8 default), handle BOM (Byte Order Mark), and report decoding errors;
     \item FR-3: Optional metadata import (e.g., author, source, label) to support grouping and filtering.
 \end{itemize}
 
@@ -48,6 +50,10 @@ The application supports:
     \item FR-10: POS and POS n-grams; content/function word ratios; lexical sophistication bands;
     \item FR-11: Custom feature plug-ins via a documented Python interface.
 \end{itemize}
+
+\import{diagrams/}{lexical_variables_selection_by_keywords}
+
+\import{diagrams/}{lexical_variables_selection_by_correlation}
 
 \subsection{Dimensional Analysis}
 \begin{itemize}
