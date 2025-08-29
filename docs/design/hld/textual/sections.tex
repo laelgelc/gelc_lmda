@@ -45,10 +45,16 @@ The application supports:
 
 \subsection{Feature Extraction}
 \begin{itemize}
-    \item FR-8: Compute lexical richness metrics (TTR, MTLD, Maas, HDD);
-    \item FR-9: Frequency features: word and lemma frequency profiles; function word distributions;
-    \item FR-10: POS and POS n-grams; content/function word ratios; lexical sophistication bands;
-    \item FR-11: Custom feature plug-ins via a documented Python interface.
+    \item FR-8: Use only content-word lemmas (based on POS) for candidate variables;
+    \item FR-9: Select exactly K lemmas (configurable; default K=1,000) as variables for downstream analysis;
+    \item FR-10: Support two selection strategies:
+    \begin{itemize}
+        \item Top-K frequent lemmas corpus-wide (with deterministic tie-breaking);
+        \item Top-K keywords (Figure \ref{fig:lexical_variables_selection_by_keywords}) via cross-group comparisons (e.g. by source/label) using configurable statistics (log-likelihood, chi-square, log-odds with smoothing), with expected-frequency filters and deterministic tie-breaking;
+    \end{itemize}
+    \item FR-11: Allow optional thresholds for candidate inclusion (minimum document frequency, minimum total frequency) and language-aware content-word definitions;
+    \item FR-12: For the selected K lemmas, compute per-document counts and normalise to per-thousand tokens (retain raw counts; optionally provide z-scored variants)
+    \item FR-13: Persist the selected vocabulary with ranks/scores and enable ``frozen vocabulary'' reuse across runs for compatibility;
 \end{itemize}
 
 \import{diagrams/}{lexical_variables_selection_by_keywords}
@@ -57,31 +63,31 @@ The application supports:
 
 \subsection{Dimensional Analysis}
 \begin{itemize}
-    \item FR-12: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
-    \item FR-13: Perform dimensionality reduction (PCA) and optional factor analysis (EFA/Varimax);
-    \item FR-14: Compute factor loadings, factor scores, and explained variance;
-    \item FR-15: Save and load trained models/pipelines for reproducibility.
+    \item FR-14: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
+    \item FR-15: Perform dimensionality reduction (PCA) and optional factor analysis (EFA/Varimax);
+    \item FR-16: Compute factor loadings, factor scores, and explained variance;
+    \item FR-17: Save and load trained models/pipelines for reproducibility.
 \end{itemize}
 
 \subsection{Visualisation and GUI}
 \begin{itemize}
-    \item FR-16: Interactive scatter/biplots of documents in 2D/3D factor space with tooltips and labels;
-    \item FR-17: Loading plots, scree plots, and feature contribution charts;
-    \item FR-18: Brushing/filtering by metadata, search, and selection for detailed inspection;
-    \item FR-19: Theming, layout persistence, and session autosave.
+    \item FR-18: Interactive scatter/biplots of documents in 2D/3D factor space with tooltips and labels;
+    \item FR-19: Loading plots, scree plots, and feature contribution charts;
+    \item FR-20: Brushing/filtering by metadata, search, and selection for detailed inspection;
+    \item FR-21: Theming, layout persistence, and session autosave.
 \end{itemize}
 
 \subsection{Export and Reporting}
 \begin{itemize}
-    \item FR-20: Export factor scores, loadings, and projections to CSV/JSON;
-    \item FR-21: Generate PDF/HTML reports with key plots and tables;
-    \item FR-22: Export model artefacts (preprocessing config, feature schema, PCA/FA components).
+    \item FR-22: Export factor scores, loadings, and projections to CSV/JSON;
+    \item FR-23: Generate PDF/HTML reports with key plots and tables;
+    \item FR-24: Export model artefacts (preprocessing config, feature schema, PCA/FA components).
 \end{itemize}
 
 \subsection{Automation and Scripting}
 \begin{itemize}
-    \item FR-23: Batch processing via CLI and/or headless mode;
-    \item FR-24: Optional REST API for programmatic access (server mode).
+    \item FR-25: Batch processing via CLI and/or headless mode;
+    \item FR-26: Optional REST API for programmatic access (server mode).
 \end{itemize}
 
 \section{Non-Functional Requirements}
