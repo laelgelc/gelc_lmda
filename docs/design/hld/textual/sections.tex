@@ -64,7 +64,7 @@ The application supports:
 \subsection{Dimensional Analysis}
 \begin{itemize}
     \item FR-14: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
-    \item FR-15: Perform dimensionality reduction (PCA) and optional factor analysis (EFA/Varimax);
+    \item FR-15: Perform dimensionality reduction with Factor Analysis (EFA/Varimax);
     \item FR-16: Compute factor loadings, factor scores, and explained variance;
     \item FR-17: Save and load trained models/pipelines for reproducibility.
 \end{itemize}
@@ -80,20 +80,21 @@ The application supports:
 \subsection{Export and Reporting}
 \begin{itemize}
     \item FR-22: Export factor scores, loadings, and projections to CSV/JSON;
-    \item FR-23: Generate PDF/HTML reports with key plots and tables;
-    \item FR-24: Export model artefacts (preprocessing config, feature schema, PCA/FA components).
+    \item FR-23: Report the N (configurable; default N=50) top scoring texts in each factor pole;
+    \item FR-24: Generate PDF/HTML reports with key plots and tables;
+    \item FR-25: Export model artefacts (preprocessing config, feature schema, PCA/FA components).
 \end{itemize}
 
 \subsection{Automation and Scripting}
 \begin{itemize}
-    \item FR-25: Batch processing via CLI and/or headless mode;
-    \item FR-26: Optional REST API for programmatic access (server mode).
+    \item FR-26: Batch processing via CLI and/or headless mode;
+    \item FR-27: Optional REST API for programmatic access (server mode).
 \end{itemize}
 
 \section{Non-Functional Requirements}
 \subsection{Performance}
 \begin{itemize}
-    \item NFR-1: Handle corpora up to 1M tokens on a standard laptop with reasonable latency (\textless 10s for PCA on 10k documents x 1k features, assuming sparse ops);
+    \item NFR-1: Handle corpora up to 1M tokens on a standard laptop with reasonable latency (\textless 10s for EFA on 10k documents x 1k features, assuming sparse ops);
     \item NFR-2: Incremental processing and caching to avoid recomputation.
 \end{itemize}
 
@@ -112,7 +113,7 @@ The application supports:
 \subsection{Portability and Compatibility}
 \begin{itemize}
     \item NFR-7: Cross-platform support (Windows, macOS, Linux);
-    \item NFR-8: Python 3.10+; packaged with virtualenv/Poetry; optional standalone (PyInstaller).
+    \item NFR-8: Python 3.10+; standalone (PyInstaller); optional packaged with virtualenv/Poetry.
 \end{itemize}
 
 \subsection{Security}
