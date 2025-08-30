@@ -82,7 +82,7 @@ The application supports:
     \item FR-22: Export factor scores, loadings, and projections to CSV/JSON;
     \item FR-23: Report the N (configurable; default N=50) top scoring texts in each factor pole;
     \item FR-24: Generate PDF/HTML reports with key plots and tables;
-    \item FR-25: Export model artefacts (preprocessing config, feature schema, EFA components).
+    \item FR-25: Export model artifacts (preprocessing config, feature schema, EFA components).
 \end{itemize}
 
 \subsection{Automation and Scripting}
@@ -124,7 +124,7 @@ The application supports:
 
 \section{System Architecture}
 \subsection{Overview}
-The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modelling, and presentation layers. A central configuration orchestrates reproducible runs; artefacts are persisted for reuse.
+The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modelling, and presentation layers. A central configuration orchestrates reproducible runs; artifacts are persisted for reuse.
 
 \subsection{Components}
 \paragraph{GUI Layer}
@@ -146,7 +146,7 @@ Performs EFA, computes loadings and scores, applies rotations (e.g., Varimax/Pro
 Generates interactive plots (2D/3D scatter, biplots, scree, loadings) and data tables; supports selections and linked views.
 
 \paragraph{Persistence Layer}
-Stores corpora metadata, preprocessed artefacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
+Stores corpora metadata, preprocessed artifacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
 
 \paragraph{API Layer (Optional)}
 FastAPI-based REST endpoints for batch/remote processing in server mode.
@@ -239,7 +239,7 @@ lmda visualise --project my_project.lmda
     \item \textbf{R5: Cross-platform GUI quirks} — Rendering differences. \\
           \emph{Mitigation}: UI testing matrix, use of Qt styles, theming validation.
     \item \textbf{R6: Reproducibility drift} — Version changes affect outputs. \\
-          \emph{Mitigation}: Lockfiles, artefact versioning, seeds, environment capture.
+          \emph{Mitigation}: Lockfiles, artifact versioning, seeds, environment capture.
 \end{itemize}
 
 \section{Timeline and Milestones}
