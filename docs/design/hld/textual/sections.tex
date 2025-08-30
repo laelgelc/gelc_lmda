@@ -64,7 +64,7 @@ The application supports:
 \subsection{Dimensional Analysis}
 \begin{itemize}
     \item FR-14: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
-    \item FR-15: Perform dimensionality reduction with Exploratory Factor Analysis (EFA/Varimax);
+    \item FR-15: Perform dimensionality reduction with Exploratory Factor Analysis (EFA/Varimax/Promax);
     \item FR-16: Compute factor loadings, factor scores, and explained variance;
     \item FR-17: Save and load trained models/pipelines for reproducibility.
 \end{itemize}
@@ -139,7 +139,7 @@ Language detection, sentence segmentation, tokenisation, lemmatisation, POS tagg
 \paragraph{Feature Service}
 Computes metrics and vectorises documents into a DFM with configurable normalisation and weighting; supports plug-ins.
 
-\paragraph{Modeling Service}
+\paragraph{Modelling Service}
 Performs EFA, computes loadings and scores, applies rotations (e.g., Varimax/Promax), and persists models.
 
 \paragraph{Visualisation Service}
@@ -250,7 +250,7 @@ lmda visualise --project my_project.lmda
           Language detection, tokenisation, lemmatisation, POS tagging; caching;
     \item \textbf{Week 5--6: Features} \\
           Core lexical metrics, function word profiles, POS n-grams; plug-in API;
-    \item \textbf{Week 7--8: Modeling} \\
+    \item \textbf{Week 7--8: Modelling} \\
           EFA pipeline, rotations, persistence; basic CLI;
     \item \textbf{Week 9--10: GUI v1} \\
           Data loading, configuration panels, 2D scatter, scree and loadings plots;
