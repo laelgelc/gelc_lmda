@@ -1,6 +1,8 @@
 \section{Project Overview}
+
 \subsection{Purpose}
-This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) (Figure \ref{fig:lexical_md_analysis}) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space via Factor Analysis (FA), and presents results through interactive visualisations and reports (Figures \ref{fig:lexical_md_analysis_procedures} and \ref{fig:from_text_to_factor}).
+
+This document describes the high-level design of a Python-based application for Lexical Multi-Dimensional Analysis (LMDA) (Figure \ref{fig:lexical_md_analysis}) with an interactive graphical user interface (GUI). The system ingests text corpora, performs linguistic preprocessing, extracts lexical features, projects texts into a multi-dimensional factor space via Exploratory Factor Analysis (EFA), and presents results through interactive visualisations and reports (Figures \ref{fig:lexical_md_analysis_procedures} and \ref{fig:from_text_to_factor}).
 
 \import{diagrams/}{md_analysis_diagram_1_lexical}
 
@@ -9,17 +11,20 @@ This document describes the high-level design of a Python-based application for 
 \import{diagrams/}{from_text_to_factor}
 
 \subsection{Scope}
+
 The application supports:
+
 \begin{itemize}
-    \item Corpus ingestion from files, folders, and CSV/TSV and JSONL columns;
+    \item Corpus ingestion from files, folders, and CSV/TSV/JSONL columns;
     \item Language-aware preprocessing (tokenisation, lemmatisation, POS tagging);
-    \item Feature extraction (lexical richness, frequency profiles, function/content word ratios, POS n-grams, domain lexicons);
-    \item Dimensionality reduction via Factor Analysis to derive interpretable dimensions;
-    \item Interactive exploration (scatter plots, loadings, factor scores), filtering, and labelling;
+    \item Feature extraction (Top-K frequent content-word lemmas, Top-K keywords);
+    \item Dimensionality reduction via Exploratory Factor Analysis to derive interpretable dimensions;
+    \item Interactive exploration (scatter plots, scree plots, loadings, factor scores), filtering, and labelling;
     \item Exportable reports (PDF/HTML) and machine-readable outputs (CSV/TSV/JSON/JSONL).
 \end{itemize}
 
 \subsection{Stakeholders}
+
 \begin{itemize}
     \item Linguists and corpus analysts;
     \item Data scientists working on stylistic and register analysis;
@@ -28,14 +33,25 @@ The application supports:
 \end{itemize}
 
 \section{Functional Requirements}
+
 \subsection{Corpus Ingestion}
+
 \begin{itemize}
     \item FR-1: Import plain text files, folders, and CSV/TSV and JSONL with a designated text column;
     \item FR-2: Detect/allow selection of text encoding (UTF-8 default), handle BOM (Byte Order Mark), and report decoding errors;
     \item FR-3: Optional metadata import (e.g., author, source, label) to support grouping and filtering.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-1-v0: Import individual texts from plain text files in an input folder. Each text file corresponds to a text individually identified by its filename;
+    \item FR-2-v0: FR-2, entirely;
+    \item FR-3-v0: When the input folder contains subfolders, each subfolder is a category (metadata) identified by its foldername.
+\end{itemize}
+
 \subsection{Preprocessing}
+
 \begin{itemize}
     \item FR-4: Tokenise, normalise (case, punctuation policies), and sentence-segment texts;
     \item FR-5: Lemmatise and POS-tag (TreeTagger; spaCy models; fallback to NLTK if unavailable);
@@ -43,7 +59,17 @@ The application supports:
     \item FR-7: Stopword management (built-in lists and user-defined additions).
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-4-v0: FR-4, entirely;
+    \item FR-5-v0: Use spaCy models;
+    \item FR-6-v0: Consider English-only;
+    \item FR-7-v0: Consider spaCy built-in stopword lists.
+\end{itemize}
+
 \subsection{Feature Extraction}
+
 \begin{itemize}
     \item FR-8: Use only content-word lemmas (based on POS) for candidate variables;
     \item FR-9: Select exactly K lemmas (configurable; default K=1,000) as variables for downstream analysis;
@@ -57,19 +83,41 @@ The application supports:
     \item FR-13: Persist the selected vocabulary with ranks/scores and enable ``frozen vocabulary'' reuse across runs for compatibility;
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-8-v0: FR-8, entirely;
+    \item FR-9-v0: FR-9, entirely;
+    \item FR-10-v0: Top-K keywords using log-likelihood. Consider the categories captured in FR-3-v0. Consider the algorithm in `code/keywords\_text\_counts.py';
+    \item FR-11-v0: Disconsider FR-11;
+    \item FR-12-v0: FR-12, entirely;
+    \item FR-13-v0: FR-13, entirely.
+\end{itemize}
+
 \import{diagrams/}{lexical_variables_selection_by_keywords}
 
 \import{diagrams/}{lexical_variables_selection_by_correlation}
 
 \subsection{Dimensional Analysis}
+
 \begin{itemize}
     \item FR-14: Build a document-feature matrix (DFM) with configurable weighting (raw, tf-idf, z-scores);
-    \item FR-15: Perform dimensionality reduction with Exploratory Factor Analysis (EFA/Varimax/Promax);
-    \item FR-16: Compute factor loadings, factor scores, and explained variance;
+    \item FR-15: Perform dimensionality reduction with Exploratory Factor Analysis (EFA/Varimax/Promax). Extract N factors (configurable, default N=6);
+    \item FR-16: Compute factor loadings, factor scores, and explained variance. Allow recomputation in case of change of quantity of extracted fators in FR-15;
     \item FR-17: Save and load trained models/pipelines for reproducibility.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-14-v0: Use the per-thousand-token normalised counts as defined in FR-12 without configurable alternative weighting;
+    \item FR-15-v0: Consider Varimax rotation;
+    \item FR-16-v0: FR-16, entirely;
+    \item FR-17-v0: FR-17, entirely.
+\end{itemize}
+
 \subsection{Visualisation and GUI}
+
 \begin{itemize}
     \item FR-18: Interactive scatter/biplots of documents in 2D/3D factor space with tooltips and labels;
     \item FR-19: Loading plots, scree plots, and feature contribution charts;
@@ -77,56 +125,127 @@ The application supports:
     \item FR-21: Theming, layout persistence, and session autosave.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-18-v0: Disconsider FR-18;
+    \item FR-19-v0: Consider scree plots to assess the amount of variance accounted for by each factor;
+    \item FR-20-v0: Disconsider FR-20;
+    \item FR-21-v0: Disconsider FR-21.
+\end{itemize}
+
 \subsection{Export and Reporting}
+
 \begin{itemize}
     \item FR-22: Export factor scores, loadings, and projections to CSV/JSON;
     \item FR-23: Report the N (configurable; default N=50) top scoring texts in each factor pole;
     \item FR-24: Generate PDF/HTML reports with key plots and tables;
-    \item FR-25: Export model artifacts (preprocessing config, feature schema, EFA components).
+    \item FR-25: Export model artefacts (preprocessing config, feature schema, EFA components).
+\end{itemize}
+
+Slice v0 scope:
+
+\begin{itemize}
+    \item FR-22-v0: FR-22, entirely;
+    \item FR-23-v0: FR-23, entirely;
+    \item FR-24-v0: Disconsider FR-24;
+    \item FR-25-v0: Disconsider FR-25.
 \end{itemize}
 
 \subsection{Automation and Scripting}
+
 \begin{itemize}
     \item FR-26: Batch processing via CLI and/or headless mode;
     \item FR-27: Optional REST API for programmatic access (server mode).
 \end{itemize}
 
-\section{Non-Functional Requirements}
-\subsection{Performance}
+Slice v0 scope:
+
 \begin{itemize}
-    \item NFR-1: Handle corpora up to 1M tokens on a standard laptop with reasonable latency (\textless 10s for EFA on 10k documents x 1k features, assuming sparse ops);
+    \item FR-26-v0: FR-26, entirely;
+    \item FR-27-v0: Disconsider FR-27.
+\end{itemize}
+
+\section{Non-Functional Requirements}
+
+\subsection{Performance}
+
+\begin{itemize}
+    \item NFR-1: Handle corpora up to 2M tokens on a standard laptop with reasonable latency (\textless 10s for EFA on 20k documents x 1k features, assuming sparse ops);
     \item NFR-2: Incremental processing and caching to avoid recomputation.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item NFR-1-v0: NFR-1, entirely;
+    \item NFR-2-v0: NFR-2, entirely.
+\end{itemize}
+
 \subsection{Usability}
+
 \begin{itemize}
     \item NFR-3: Intuitive GUI with sensible defaults; accessible color schemes;
     \item NFR-4: Contextual help and onboarding tips; undo/redo for key actions.
 \end{itemize}
 
-\subsection{Reliability and Robustness}
+Slice v0 scope:
+
 \begin{itemize}
-    \item NFR-5: Deterministic pipelines when seeds are fixed; versioned model artifacts;
+    \item NFR-3-v0: Disconsider NFR-3;
+    \item NFR-4-v0: Disconsider NFR-4.
+\end{itemize}
+
+\subsection{Reliability and Robustness}
+
+\begin{itemize}
+    \item NFR-5: Deterministic pipelines when seeds are fixed; versioned model artefacts;
     \item NFR-6: Error handling with clear diagnostics and recovery suggestions.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item NFR-5-v0: NFR-5, entirely;
+    \item NFR-6-v0: Disconsider NFR-6.
+\end{itemize}
+
 \subsection{Portability and Compatibility}
+
 \begin{itemize}
     \item NFR-7: Cross-platform support (Windows, macOS, Linux);
     \item NFR-8: Python 3.10+; standalone (PyInstaller); optional packaged with virtualenv/Poetry.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item NFR-7-v0: Consider Windows;
+    \item NFR-8-v0: Consider Python 3.12.11.
+\end{itemize}
+
 \subsection{Security}
+
 \begin{itemize}
     \item NFR-9: Local-only data processing by default; no data leaves the machine;
     \item NFR-10: If server mode is enabled, enforce TLS and authentication.
 \end{itemize}
 
+Slice v0 scope:
+
+\begin{itemize}
+    \item NFR-9-v0: NFR-9, entirely;
+    \item NFR-10-v0: Disconsider NFR-10.
+\end{itemize}
+
 \section{System Architecture}
+
 \subsection{Overview}
-The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modelling, and presentation layers. A central configuration orchestrates reproducible runs; artifacts are persisted for reuse.
+
+The system follows a modular, pipeline-oriented architecture separating ingestion, preprocessing, feature extraction, modelling, and presentation layers. A central configuration orchestrates reproducible runs; artefacts are persisted for reuse.
 
 \subsection{Components}
+
 \paragraph{GUI Layer}
 Desktop GUI (PySide6/PyQt) for user workflows: project management, corpus loading, configuration, visualisation, and export.
 
@@ -146,20 +265,22 @@ Performs EFA, computes loadings and scores, applies rotations (e.g., Varimax/Pro
 Generates interactive plots (2D/3D scatter, biplots, scree, loadings) and data tables; supports selections and linked views.
 
 \paragraph{Persistence Layer}
-Stores corpora metadata, preprocessed artifacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
+Stores corpora metadata, preprocessed artefacts, features, and models (e.g., SQLite for metadata, parquet/npz for matrices, joblib for models).
 
 \paragraph{API Layer (Optional)}
 FastAPI-based REST endpoints for batch/remote processing in server mode.
 
 \subsection{Data Flow}
+
 \begin{enumerate}
     \item Import corpus $\rightarrow$ normalise text $\rightarrow$ linguistic annotation.
     \item Extract features $\rightarrow$ construct DFM $\rightarrow$ apply weighting/normalisation.
-    \item Fit EFA $\rightarrow$ compute scores/loadings $\rightarrow$ store artifacts.
+    \item Fit EFA $\rightarrow$ compute scores/loadings $\rightarrow$ store artefacts.
     \item Visualise and interact $\rightarrow$ export results and reports.
 \end{enumerate}
 
 \section{Technology Stack}
+
 \begin{itemize}
     \item Language: Python 3.12 (or 3.10+);
     \item GUI: PySide6 or PyQt6; alternative: Qt for Python widgets + matplotlib/seaborn/plotly;
@@ -173,16 +294,19 @@ FastAPI-based REST endpoints for batch/remote processing in server mode.
 \end{itemize}
 
 \section{Interfaces and APIs}
+
 \subsection{Python Module Interfaces}
+
 \begin{itemize}
     \item \textbf{Preprocessor}: \texttt{process(corpus, config) $\rightarrow$ annotations};
     \item \textbf{FeatureExtractor}: \texttt{fit\_transform(annotations) $\rightarrow$ DFM}; \texttt{transform(...)};
     \item \textbf{Modeler}: \texttt{fit(DFM) $\rightarrow$ model}; \texttt{transform(DFM) $\rightarrow$ scores};
     \item \textbf{Visualiser}: \texttt{plots(scores, loadings, metadata)};
-    \item \textbf{Persistence}: \texttt{save\_artifact(obj, kind)} and \texttt{load\_artifact(kind)}.
+    \item \textbf{Persistence}: \texttt{save\_artefact(obj, kind)} and \texttt{load\_artefact(kind)}.
 \end{itemize}
 
 \subsection{Plug-in Interface}
+
 Third-party feature extractors implement \texttt{IFeaturePlugin}:
 \begin{itemize}
     \item \texttt{schema()} returns feature names and dtypes;
@@ -191,12 +315,14 @@ Third-party feature extractors implement \texttt{IFeaturePlugin}:
 \end{itemize}
 
 \subsection{CLI}
+
 \begin{verbatim}
-lmda run --config config.yaml --input corpus/ --output artifacts/
+lmda run --config config.yaml --input corpus/ --output artefacts/
 lmda visualise --project my_project.lmda
 \end{verbatim}
 
 \subsection{Optional REST API (FastAPI)}
+
 \begin{itemize}
     \item POST /v1/projects: create project
     \item POST /v1/projects/{id}/ingest: upload texts/metadata
@@ -207,7 +333,9 @@ lmda visualise --project my_project.lmda
 \end{itemize}
 
 \section{Security and Privacy Considerations}
+
 \subsection{Data Protection}
+
 \begin{itemize}
     \item Local-first processing; no external calls by default;
     \item Optional at-rest encryption for project files; secure temp directories;
@@ -215,18 +343,21 @@ lmda visualise --project my_project.lmda
 \end{itemize}
 
 \subsection{Access Control (Server Mode)}
+
 \begin{itemize}
     \item Authentication (OAuth2/JWT) and role-based access control (RBAC);
     \item TLS enforcement; secure headers and CSRF protections for Web GUI (if used).
 \end{itemize}
 
 \subsection{Supply Chain}
+
 \begin{itemize}
     \item Pin dependencies; verify wheels; use vulnerability scanning (pip-audit, Safety);
     \item Sandboxed plug-ins with permission checks.
 \end{itemize}
 
 \section{Risks and Mitigations}
+
 \begin{itemize}
     \item \textbf{R1: Model interpretability} — Factors may be hard to interpret. \\
           \emph{Mitigation}: Offer rotations, feature contribution charts, and glossary tooltips.
@@ -239,10 +370,11 @@ lmda visualise --project my_project.lmda
     \item \textbf{R5: Cross-platform GUI quirks} — Rendering differences. \\
           \emph{Mitigation}: UI testing matrix, use of Qt styles, theming validation.
     \item \textbf{R6: Reproducibility drift} — Version changes affect outputs. \\
-          \emph{Mitigation}: Lockfiles, artifact versioning, seeds, environment capture.
+          \emph{Mitigation}: Lockfiles, artefact versioning, seeds, environment capture.
 \end{itemize}
 
 \section{Timeline and Milestones}
+
 \begin{enumerate}
     \item \textbf{Week 1--2: Foundations} \\
           Project scaffolding, env setup, CI/CD, basic data model, configuration schema;
