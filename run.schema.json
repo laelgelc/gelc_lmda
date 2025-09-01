@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LMDA Slice v0 run.json schema",
+  "type": "object",
+  "required": ["run", "environment", "config_snapshot", "inputs", "artifacts", "timings_sec"],
+  "properties": {
+    "run": {
+      "type": "object",
+      "required": ["started_at", "finished_at", "status", "seed"],
+      "properties": {
+        "started_at": {"type": "string"},
+        "finished_at": {"type": "string"},
+        "status": {"type": "string", "enum": ["success", "failure"]},
+        "seed": {"type": "integer"}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["python", "packages"],
+      "properties": {
+        "python": {"type": "string"},
+        "packages": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    },
+    "config_snapshot": {
+      "type": "object",
+      "required": ["input", "preprocessing", "features", "modeling", "output"],
+      "properties": {
+        "input": {"type": "object"},
+        "preprocessing": {"type": "object"},
+        "features": {"type": "object"},
+        "modeling": {"type": "object"},
+        "output": {"type": "object"}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["corpus_dir", "documents", "categories"],
+      "properties": {
+        "corpus_dir": {"type": "string"},
+        "documents": {"type": "integer", "minimum": 0},
+        "categories": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "vocabulary_csv",
+        "counts_raw_npz",
+        "counts_norm_npz",
+        "factors_loadings_csv",
+        "factors_scores_csv",
+        "explained_variance_csv",
+        "scree_plot_png",
+        "log_file"
+      ],
+      "properties": {
+        "vocabulary_csv": {"$ref": "#/$defs/fileEntryWithK"},
+        "counts_raw_npz": {"$ref": "#/$defs/fileEntry"},
+        "counts_norm_npz": {"$ref": "#/$defs/fileEntry"},
+        "factors_loadings_csv": {"$ref": "#/$defs/fileEntry"},
+        "factors_scores_csv": {"$ref": "#/$defs/fileEntry"},
+        "explained_variance_csv": {"$ref": "#/$defs/fileEntry"},
+        "scree_plot_png": {"$ref": "#/$defs/fileEntry"},
+        "log_file": {"$ref": "#/$defs/fileEntry"}
+      },
+      "additionalProperties": false
+    },
+    "timings_sec": {
+      "type": "object",
+      "required": ["ingestion", "preprocessing", "features", "modeling", "export"],
+      "properties": {
+        "ingestion": {"type": "number", "minimum": 0},
+        "preprocessing": {"type": "number", "minimum": 0},
+        "features": {"type": "number", "minimum": 0},
+        "modeling": {"type": "number", "minimum": 0},
+        "export": {"type": "number", "minimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "fileEntry": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+      }
+    },
+    "fileEntryWithK": {
+      "allOf": [
+        {"$ref": "#/$defs/fileEntry"},
+        {
+          "type": "object",
+          "required": ["k"],
+          "properties": {
+            "k": {"type": "integer", "minimum": 1}
+          }
+        }
+      ]
+    }
+  }
+}

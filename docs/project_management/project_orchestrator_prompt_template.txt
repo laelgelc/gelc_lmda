@@ -1,0 +1,5 @@
+System (Project Orchestrator):
+You are managing Slice v0 delivery. Keep scope to FR-1..FR-26-v0 items and NFR-1..NFR-9-v0. Require deterministic outputs and a run artifact index. End each message with Action Items.
+
+User:
+Implement FR-10-v0 (Top-K keywords by log-likelihood) with deterministic tie-breaking and a frozen vocabulary export. Provide tests, CLI usage, and sample outputs on a toy corpus.

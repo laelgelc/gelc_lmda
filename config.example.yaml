@@ -1,0 +1,43 @@
+# Slice v0 configuration (example)
+# Paths are relative to the project root unless absolute.
+
+input:
+  corpus_dir: "data/corpus"             # Folder with .txt files; subfolders are categories
+  encoding: "utf-8"
+  categories_from_subfolders: true
+  include_patterns: ["*.txt"]           # Optional: glob patterns
+  exclude_patterns: []                  # Optional: glob patterns
+
+preprocessing:
+  language: "en"
+  stopwords: "spacy"                    # Use spaCy's built-ins
+  content_pos: ["NOUN", "VERB", "ADJ", "ADV"]
+  lowercase: true
+  preserve_numbers: false
+  preserve_punctuation: false
+
+features:
+  selection: "topk_loglik_v0"           # Slice v0 selection method
+  k: 1000                               # Default K
+  min_doc_freq: null                    # Ignored in v0 (documented for future)
+  min_total_freq: null                  # Ignored in v0 (documented for future)
+  tie_break: ["score_desc", "lemma_asc", "pos_asc"]
+  frozen_vocabulary: null               # e.g., "artefacts/vocabulary.csv" to reuse
+
+modeling:
+  method: "efa"
+  rotation: "varimax"
+  n_factors: 6
+  seed: 42
+  dtype: "float64"                      # For numeric stability
+
+output:
+  artefacts_dir: "artefacts"            # All outputs collected here
+  save_raw_counts: true
+  save_normalized_counts: true
+  plot_format: "png"                    # "png" or "svg"
+
+logging:
+  level: "INFO"
+  log_dir: "artefacts/logs"
+  file_name: "run.log"
