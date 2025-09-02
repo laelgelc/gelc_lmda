@@ -1,0 +1,69 @@
+{
+  "run": {
+    "started_at": "2025-09-02T18:13:02Z",
+    "finished_at": "2025-09-02T18:13:03Z",
+    "status": "success",
+    "seed": null
+  },
+  "environment": {
+    "started_at": "2025-09-02T18:13:02Z",
+    "python": "3.12.3",
+    "packages": {
+      "spacy": "3.8.7",
+      "model": "en_core_web_sm"
+    }
+  },
+  "config_snapshot": {
+    "input": {
+      "corpus_dir": "data\\fixture_corpus",
+      "encoding": "utf-8",
+      "include_patterns": [
+        "*.txt"
+      ],
+      "exclude_patterns": []
+    },
+    "preprocessing": {
+      "language": "en",
+      "keep_stopwords": false,
+      "content_pos": [
+        "NOUN",
+        "VERB",
+        "ADJ",
+        "ADV"
+      ],
+      "lowercase": true,
+      "batch_size": 64
+    },
+    "output": {
+      "output_dir": "artefacts_poc"
+    }
+  },
+  "inputs": {
+    "documents_scanned": 6,
+    "documents_processed": 6,
+    "categories": [
+      "blogs",
+      "news",
+      "reports"
+    ]
+  },
+  "artifacts": {
+    "docs_csv": {
+      "path": "artefacts_poc\\docs.csv"
+    },
+    "tokens_table": {
+      "path": "artefacts_poc\\tokens.csv"
+    },
+    "errors_csv": {
+      "path": null
+    },
+    "log_file": {
+      "path": "artefacts_poc\\logs\\poc_run.log"
+    }
+  },
+  "timings_sec": {
+    "ingestion": 0.003,
+    "preprocessing": 0.426,
+    "export": 0.0
+  }
+}

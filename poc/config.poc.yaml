@@ -1,0 +1,16 @@
+# YAML
+input:
+  corpus_dir: "data/fixture_corpus"
+  encoding: "utf-8"
+  include_patterns: ["*.txt"]
+  exclude_patterns: []
+preprocessing:
+  language: "en"
+  keep_stopwords: false
+  content_pos: ["NOUN", "VERB", "ADJ", "ADV"]
+  lowercase: true
+  batch_size: 64
+output:
+  output_dir: "artefacts_poc"
+logging:
+  level: "INFO"
