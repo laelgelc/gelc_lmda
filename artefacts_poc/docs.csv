@@ -1,0 +1,7 @@
+doc_id,category,path,n_chars,n_sentences,n_tokens_raw,n_tokens_content,n_types_content,encoding_used,warnings
+blogs/blog_001.txt,blogs,data\fixture_corpus\blogs\blog_001.txt,65,1,12,7,7,utf-8,
+blogs/blog_002.txt,blogs,data\fixture_corpus\blogs\blog_002.txt,74,1,11,8,8,utf-8,
+news/news_001.txt,news,data\fixture_corpus\news\news_001.txt,76,2,11,9,9,utf-8,
+news/news_002.txt,news,data\fixture_corpus\news\news_002.txt,73,1,10,7,7,utf-8,
+reports/report_001.txt,reports,data\fixture_corpus\reports\report_001.txt,76,1,10,8,8,utf-8,
+reports/report_002.txt,reports,data\fixture_corpus\reports\report_002.txt,65,1,8,6,6,utf-8,
