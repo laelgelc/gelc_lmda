@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Usage: bash scripts/create_fixture_corpus.sh
+
 # Create folders
 mkdir -p data/fixture_corpus/{news,blogs,reports}
 
