@@ -235,7 +235,9 @@ bash scripts/create_fixture_corpus.sh # or run the equivalent steps on your OS
 # Run PoC
 lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
 # Inspect outputs
-head -n 5 artefacts_poc/docs.csv head -n 5 artefacts_poc/tokens.csv # or open parquet if used tail -n 20 artefacts_poc/logs/poc_run.log
+head -n 5 artefacts_poc/docs.csv
+head -n 5 artefacts_poc/tokens.csv # or open parquet if used
+tail -n 20 artefacts_poc/logs/poc_run.log
 # Check run_poc.json has environment (python, spacy), config snapshot, and artifact paths
 ``` 
 

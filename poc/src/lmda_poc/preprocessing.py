@@ -17,14 +17,26 @@ class TokenCount:
 
 def preflight_spacy(model_name: str = "en_core_web_sm") -> Tuple[str, str]:
     # Returns (spacy_version, model_name_loaded)
-    nlp = spacy.load(model_name, disable=[])
+    try:
+        # Prefer package import + .load() for PyInstaller-friendly behavior
+        import en_core_web_sm  # type: ignore
+        _ = en_core_web_sm.load()
+        loaded = "en_core_web_sm"
+    except Exception as e:
+        logging.error("Failed to load spaCy model via package import: %s", e)
+        # Fallback to spacy.load (works in dev environments)
+        _ = spacy.load(model_name, disable=[])
+        loaded = model_name
     spacy_version = spacy.__version__
-    logging.info("spaCy preflight OK: spacy=%s, model=%s", spacy_version, model_name)
-    return spacy_version, model_name
-
+    logging.info("spaCy preflight OK: spacy=%s, model=%s", spacy_version, loaded)
+    return spacy_version, loaded
 
 def build_pipeline(model_name: str = "en_core_web_sm", add_sentencizer: bool = True):
-    nlp = spacy.load(model_name, disable=[])
+    try:
+        import en_core_web_sm  # type: ignore
+        nlp = en_core_web_sm.load()
+    except Exception:
+        nlp = spacy.load(model_name, disable=[])
     if add_sentencizer and "senter" not in nlp.pipe_names and "sentencizer" not in nlp.pipe_names:
         nlp.add_pipe("sentencizer")
     return nlp

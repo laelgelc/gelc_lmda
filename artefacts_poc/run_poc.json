@@ -1,12 +1,12 @@
 {
   "run": {
-    "started_at": "2025-09-02T17:17:51Z",
-    "finished_at": "2025-09-02T17:17:52Z",
+    "started_at": "2025-09-02T18:13:02Z",
+    "finished_at": "2025-09-02T18:13:03Z",
     "status": "success",
     "seed": null
   },
   "environment": {
-    "started_at": "2025-09-02T17:17:51Z",
+    "started_at": "2025-09-02T18:13:02Z",
     "python": "3.12.3",
     "packages": {
       "spacy": "3.8.7",
@@ -62,8 +62,8 @@
     }
   },
   "timings_sec": {
-    "ingestion": 0.01,
-    "preprocessing": 0.451,
+    "ingestion": 0.003,
+    "preprocessing": 0.426,
     "export": 0.0
   }
 }
