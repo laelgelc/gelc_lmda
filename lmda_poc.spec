@@ -1,39 +1,58 @@
-# Python
-# File: lmda_poc.spec (place at the repository root)
-# Build with: pyinstaller lmda_poc.spec
-
+# -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_all
-from PyInstaller.building.build_main import Analysis, PYZ, EXE, COLLECT
-import os
-import sys
 
 # Increase recursion limit
+import sys
 sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
-# Collect spaCy and the English model resources
-spacy_datas, spacy_binaries, spacy_hidden = collect_all('spacy')
-model_datas, model_binaries, model_hidden = collect_all('en_core_web_sm')
+datas = []
+binaries = []
+hiddenimports = []
+tmp_ret = collect_all('spacy')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('en_core_web_sm')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
-pathex = [os.path.join(os.getcwd(), 'poc', 'src')]
 
 a = Analysis(
-    ['run_poc.py'],
-    pathex=pathex,
-    binaries=spacy_binaries + model_binaries,
-    datas=spacy_datas + model_datas,
-    hiddenimports=spacy_hidden + model_hidden,
+    ['run_lmda_poc.py'],
+    pathex=['poc/src'],
+    binaries=binaries,
+    datas=datas,
+    hiddenimports=hiddenimports,
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
     noarchive=False,
+    optimize=0,
 )
+pyz = PYZ(a.pure)
 
-pyz = PYZ(a.pure, a.zipped_data)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
+    [],
+    exclude_binaries=True,
     name='lmda_poc',
-    console=True,      # console app
-    icon=None,
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon=['LAEL.ico'],
 )
-# For --onefile build, use EXE only; for onedir, wrap with COLLECT.
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='lmda_poc',
+)

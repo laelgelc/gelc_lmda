@@ -34,12 +34,12 @@ from .io_artifacts import (
 
 def parse_args(argv: List[str]) -> argparse.Namespace:
     ap = argparse.ArgumentParser(
-        prog="lmda poc-preprocess",
+        prog="lmda_poc",
         description="PoC: Ingest .txt corpus and preprocess English with spaCy to produce docs and tokens tables.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         epilog=(
             "Examples:\n"
-            "  lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8\n"
+            "  lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8\n"
             "  python -m lmda_poc.cli --input data/fixture_corpus --output artefacts_poc\n"
         ),
     )
