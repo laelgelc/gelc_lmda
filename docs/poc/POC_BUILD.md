@@ -111,16 +111,70 @@ PS C:\Users\eyamr\Downloads>
 ### 2.1 Build
 
 ```
-export PYTHONPATH="$PWD/poc/src"
-pyinstaller lmda_poc.spec
+(my_env) eyamrog@Rog-iMac gelc_lmda % export PYTHONPATH="$PWD/poc/src"
+(my_env) eyamrog@Rog-iMac gelc_lmda % pyinstaller lmda_poc.spec
+
+<omitted>
+
+287930 INFO: Build complete! The results are available in: /Users/eyamrog/PycharmProjects/gelc_lmda/dist
+(my_env) eyamrog@Rog-iMac gelc_lmda % 
 ```
 
 ### 2.2 Run
 
 ```
-./lmda_poc/lmda_poc --input ./data/fixture_corpus --output ./artefacts_poc
+(my_env) eyamrog@Rog-iMac Downloads % ./lmda_poc/lmda_poc --input ./data/fixture_corpus --output ./artefacts_poc
+2025-09-03 07:18:52 | INFO | Logging initialized
+2025-09-03 07:18:52 | INFO | PoC run started at 2025-09-03T10:18:52Z
+2025-09-03 07:18:53 | INFO | spaCy preflight OK: spacy=3.8.7, model=en_core_web_sm
+2025-09-03 07:18:53 | INFO | Discovered 6 candidate files
+2025-09-03 07:18:53 | INFO | Ingestion summary: scanned=6, processed=6, errors=0
+2025-09-03 07:18:54 | INFO | Wrote artefacts_poc/docs.csv (6 rows)
+2025-09-03 07:18:54 | INFO | Wrote artefacts_poc/tokens.csv (45 rows)
+2025-09-03 07:18:54 | INFO | Wrote artefacts_poc/run_poc.json
+2025-09-03 07:18:54 | INFO | Action Items:
+- Review artefacts_poc/run_poc.json
+- Inspect artefacts_poc/docs.csv and artefacts_poc/tokens.csv
+- Check log at artefacts_poc/logs/poc_run.log
+Processed 6 docs across 3 categories in 0.80s. Artifacts at artefacts_poc. See logs/poc_run.log.
+(my_env) eyamrog@Rog-iMac Downloads % 
+(my_env) eyamrog@Rog-iMac Downloads % ./lmda_poc/lmda_poc                                                       
+usage: lmda_poc [-h] --input INPUT --output OUTPUT [--encoding ENCODING] [--include-patterns INCLUDE_PATTERNS] [--exclude-patterns EXCLUDE_PATTERNS]
+                [--keep-stopwords KEEP_STOPWORDS] [--content-pos CONTENT_POS] [--lowercase LOWERCASE] [--batch-size BATCH_SIZE] [--dry-run]
+                [--log-level LOG_LEVEL] [--fail-on-decode-error]
+lmda_poc: error: the following arguments are required: --input, --output
+(my_env) eyamrog@Rog-iMac Downloads % 
+(my_env) eyamrog@Rog-iMac Downloads % ./lmda_poc/lmda_poc --help
+usage: lmda_poc [-h] --input INPUT --output OUTPUT [--encoding ENCODING] [--include-patterns INCLUDE_PATTERNS] [--exclude-patterns EXCLUDE_PATTERNS]
+                [--keep-stopwords KEEP_STOPWORDS] [--content-pos CONTENT_POS] [--lowercase LOWERCASE] [--batch-size BATCH_SIZE] [--dry-run]
+                [--log-level LOG_LEVEL] [--fail-on-decode-error]
 
-./lmda_poc/lmda_poc
+PoC: Ingest .txt corpus and preprocess English with spaCy to produce docs and tokens tables.
 
-./lmda_poc/lmda_poc --help
+options:
+  -h, --help            show this help message and exit
+  --input INPUT         Input directory (corpus root) (default: None)
+  --output OUTPUT       Output directory for PoC artifacts (default: None)
+  --encoding ENCODING   Default file encoding (default: utf-8) (default: utf-8)
+  --include-patterns INCLUDE_PATTERNS
+                        Comma-separated glob patterns to include (default: *.txt)
+  --exclude-patterns EXCLUDE_PATTERNS
+                        Comma-separated glob patterns to exclude (default: )
+  --keep-stopwords KEEP_STOPWORDS
+                        Keep stopwords (true/false) (default: False)
+  --content-pos CONTENT_POS
+                        Comma-separated POS tags to keep as content words (default: NOUN,VERB,ADJ,ADV)
+  --lowercase LOWERCASE
+                        Lowercase lemmas (true/false) (default: True)
+  --batch-size BATCH_SIZE
+                        spaCy nlp.pipe batch size (default: 64) (default: 64)
+  --dry-run             List what would be processed; do not write artifacts (default: False)
+  --log-level LOG_LEVEL
+                        Logging level (DEBUG, INFO, WARN, ERROR) (default: INFO)
+  --fail-on-decode-error
+                        Exit non-zero on decoding error (default: False)
+
+Examples: lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8 python -m lmda_poc.cli --input data/fixture_corpus --output
+artefacts_poc
+(my_env) eyamrog@Rog-iMac Downloads % 
 ```
