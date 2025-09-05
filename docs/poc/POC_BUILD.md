@@ -3,7 +3,6 @@
 ## 1. On Windows
 
 ### 1.1 Build
-
 ```
 (my_env) PS C:\Users\eyamr\PycharmProjects\gelc_lmda> $env:PYTHONPATH = "$PWD\poc\src"
 (my_env) PS C:\Users\eyamr\PycharmProjects\gelc_lmda> pyinstaller --name lmda_poc --icon=LAEL.ico --paths poc/src --collect-all spacy --collect-all en_core_web_sm run_lmda_poc.py
@@ -48,7 +47,6 @@ With the default recursion limit (1000), the recursion error occurs at about
 ```
 
 ### 1.2. Run
-
 ```
 PS C:\Users\eyamr\Downloads> .\lmda_poc\lmda_poc --input .\data\fixture_corpus --output .\artefacts_poc
 2025-09-03 06:48:15 | INFO | Logging initialized
@@ -109,7 +107,6 @@ PS C:\Users\eyamr\Downloads>
 ## 2. On macOS (Intel x86_64)
 
 ### 2.1 Build
-
 ```
 (my_env) eyamrog@Rog-iMac gelc_lmda % export PYTHONPATH="$PWD/poc/src"
 (my_env) eyamrog@Rog-iMac gelc_lmda % pyinstaller lmda_poc.spec
@@ -121,7 +118,6 @@ PS C:\Users\eyamr\Downloads>
 ```
 
 ### 2.2 Run
-
 ```
 (my_env) eyamrog@Rog-iMac Downloads % ./lmda_poc/lmda_poc --input ./data/fixture_corpus --output ./artefacts_poc
 2025-09-03 07:18:52 | INFO | Logging initialized

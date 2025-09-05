@@ -1,5 +1,6 @@
-# PoC Specs
+# PoC Specifications
 
+## Command-line interface (CLI)
 CLI: lmda poc-preprocess
 
 Purpose: Ingest folder of .txt files, derive categories from subfolders, preprocess English with spaCy, filter to content-word lemmas, and write simple artefacts.
@@ -50,7 +51,7 @@ Exit codes
 - 2 decoding errors with --fail-on-decode-error
 - 3 preprocessing errors (spaCy/model not available, etc.)
 
-Micro-Usability (NFR-3-lite)
+## Micro-Usability (NFR-3-lite)
 - Enhanced --help: include brief examples and show defaults for all options.
 - Friendly errors with remediation:
     - Missing spaCy/model → instruct how to enable them in your environment.
@@ -63,7 +64,7 @@ Micro-Usability (NFR-3-lite)
 - Final success line:
     - “Processed <docs> docs across <categories> in <sec>s. Artifacts at <output>. See logs/poc_run.log.”
 
-Preflight and Environment
+## Preflight and Environment
 - At startup, check:
     - spaCy import succeeds.
     - en_core_web_sm loads; print model name/version.
@@ -71,28 +72,28 @@ Preflight and Environment
     - Exit code 3 with a clear message to enable the required packages in your environment.
 - Log detected Python and spaCy versions in run_poc.json.environment and in logs/poc_run.log.
 
-Cross-Platform Compatibility (NFR-7-v0)
+## Cross-Platform Compatibility (NFR-7-v0)
 - Use pathlib for all paths and globs; avoid OS-specific separators. Normalize doc_id via Path(relative_path).as_posix().
 - Do not rely on shell-only features; provide commands/examples that work in common shells. Prefer Python utilities for setup tasks.
 - Handle encodings/newlines robustly; do not assume LF. Default to UTF-8; retry with "utf-8-sig" on UnicodeDecodeError per FR-2-v0 policy.
 - Keep spaCy processing single-process (n_process=1) for determinism and Windows compatibility.
 - Avoid symlinks/xattrs/chmod-specific logic.
 
-Python Version Compatibility (NFR-8-v0)
+## Python Version Compatibility (NFR-8-v0)
 - Target runtime: Python 3.12.11.
 - Preflight prints python_version and spacy/model versions; record them in run_poc.json.environment.
 - Dependencies limited to those required for FR-1..FR-7-v0 to keep the PoC lean and compatible.
 
-Windows notes (PoC)
+## Windows notes (PoC)
 - Use Python-based helpers for setup (e.g., creating the fixture corpus) to avoid shell incompatibilities.
 - Example invocation (PowerShell):
   lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8
 
-Deterministic identifiers
+## Deterministic identifiers
 - doc_id: relative path from --input using forward slashes (e.g., blogs/blog_001.txt).
 - category: first path segment (before first slash) under --input; if the file is directly under --input, category = uncategorized.
 
-Source Code Isolation (PoC)
+## Source Code Isolation (PoC)
 - Goal: Prevent PoC code from mixing with Slice v0 implementation while enabling easy demo and later migration.
 - Layout:
     - poc/
@@ -115,7 +116,8 @@ Source Code Isolation (PoC)
 - Migration (later):
     - Copy (not import) hardened modules into Slice v0 packages; keep PoC intact until parity is confirmed, then archive/remove in a cleanup PR.
 
-Artifacts (all under --output)
+## Artifacts (all under --output)
+
 1. docs.csv
 
 - Purpose: One row per document with metadata and summary stats.
@@ -131,7 +133,7 @@ Artifacts (all under --output)
     - encoding_used (string): final encoding used to decode file.
     - warnings (string): optional note (e.g., “empty_doc”, “short_doc”, “skipped_nonalpha_tokens”); empty if none.
 
-1. tokens.csv or tokens.parquet
+2. tokens.csv or tokens.parquet
 
 - Purpose: Aggregated per-document content-word lemma counts.
 - Columns:
@@ -145,7 +147,7 @@ Artifacts (all under --output)
     - Exclude stopwords when --keep-stopwords=false.
     - Do not include non-alpha tokens if you apply token.is_alpha (recommended for PoC).
 
-1. errors.csv (only if any errors occurred)
+3. errors.csv (only if any errors occurred)
 
 - Purpose: Record decoding or processing issues and allow resumable runs.
 - Columns:
@@ -156,13 +158,13 @@ Artifacts (all under --output)
 
 - If no errors, do not write this file.
 
-1. logs/poc_run.log
+4. logs/poc_run.log
 
 - INFO summary per stage: file counts, category distribution, timings.
 - WARN for recoverable issues (empty docs).
 - ERROR for unrecoverable issues (only if aborting).
 
-1. run_poc.json
+5. run_poc.json
 
 - Purpose: Minimal provenance and quick inspection.
 - Structure:
@@ -177,7 +179,7 @@ Artifacts (all under --output)
     - artifacts: { docs_csv: { path }, tokens_table: { path }, errors_csv: { path or null }, log_file: { path } }
     - timings_sec: { ingestion, preprocessing, export }
 
-Behavioral rules and defaults
+## Behavioral rules and defaults
 - Ordering: Always process files in lexicographic order of relative path.
 - Content POS: Default {NOUN, VERB, ADJ, ADV}. Make this a strict include filter.
 - Normalization: Apply lowercase if --lowercase=true; filter token.is_alpha to avoid punctuation/numbers noise in PoC.
@@ -185,14 +187,14 @@ Behavioral rules and defaults
 - Sentence boundaries: Use spaCy sentencizer; if missing, add sentencizer component to pipeline.
 - Determinism: Use n_process=1; do not rely on nondeterministic threading. Log the exact spaCy model name/version.
 
-Suggested CLI help text snippets
+## Suggested CLI help text snippets
 - Example usage:
     - lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc
 
 - English-only note:
     - PoC supports English only. If the model is unavailable, the command will exit with guidance to enable it in your environment.
 
-Validation checklist for the demo
+## Validation checklist for the demo
 - docs.csv has one row per input file and plausible counts.
 - tokens.csv/parquet contains only POS in {NOUN, VERB, ADJ, ADV} and no stopwords when keep-stopwords=false.
 - Category values match first-level subfolder names.
@@ -202,17 +204,17 @@ Validation checklist for the demo
 - run_poc.json present with config snapshot and artifact paths.
 - Preflight reports spaCy and model versions; English-only confirmed.
 
-Validation checklist additions (NFR-7-v0 and NFR-8-v0)
+## Validation checklist additions (NFR-7-v0 and NFR-8-v0)
 - Paths are constructed with pathlib; doc_id values are forward-slash normalized (as_posix).
 - PoC runs cleanly on Windows and Linux with Python 3.12.11 (smoke test on fixture corpus).
 - run_poc.json includes environment.python and packages.spacy entries with versions.
 
-Validation checklist additions (Isolation)
+## Validation checklist additions (Isolation)
 - PoC package imports are limited to lmda_poc and allowed third-party libs (no cross-imports from v0).
 - All PoC outputs are written under artefacts_poc/.
 - CI runs a separate PoC smoke test that does not affect Slice v0 jobs.
 
-Definition of Done (PoC)
+## Definition of Done (PoC)
 - CLI runs end-to-end:
   - lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
 - Outputs exist and are populated:
@@ -228,7 +230,7 @@ Definition of Done (PoC)
 - Cross-platform and version:
   - Paths via pathlib; runs on Python 3.12.11; smoke test OK on Windows/Linux
 
-Runbook (Demo Flow)
+## Runbook (Demo Flow)
 ```
 # Ensure fixture corpus
 bash scripts/create_fixture_corpus.sh # or run the equivalent steps on your OS
@@ -241,7 +243,7 @@ tail -n 20 artefacts_poc/logs/poc_run.log
 # Check run_poc.json has environment (python, spacy), config snapshot, and artifact paths
 ``` 
 
-Mini Task Breakdown and Evidence
+## Mini Task Breakdown and Evidence
 - Task 1: Ingestion & Metadata
   - Deliverables: docs.csv (doc_id, category, path, n_chars)
   - Evidence: log summary by category; sample rows in PR
@@ -258,11 +260,11 @@ Mini Task Breakdown and Evidence
   - Deliverables: PoC writes only to artefacts_poc/; paths via pathlib; doc_id normalized
   - Evidence: artefacts_poc/ listing; code note that doc_id uses as_posix()
 
-Nice-to-have if time permits
+## Nice-to-have if time permits
 - Cache: If --cache-dir is set, store per-doc (lemma,pos,count) counters keyed by (relative_path, size, mtime). On match, reuse counts without reprocessing.
 - Simple progress bar (only if logging is not enough).
 
-Action Items
+## Action Items
 - Implement CLI parsing with the arguments above.
 - Implement deterministic folder walk and metadata extraction.
 - Integrate spaCy English pipeline; apply filters and compute counters.
