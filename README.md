@@ -44,3 +44,24 @@ bash head -n 5 artefacts/vocabulary.csv head -n 5 artefacts/factors_loadings.csv
 - artefacts/factors_scores.csv
 - artefacts/explained_variance.csv
 - artefacts/scree_plot.png  # or .svg per config
+
+## License
+
+This project is licensed under the Apache License, Version 2.0. See the LICENSE file for details. A NOTICE file is included for attribution notices required by Apache-2.0.
+
+## Citation
+
+If you use this software in academic work, please cite:
+
+Berber Sardinha, T., & Fitzsimmons-Doolan, S. (2025). Lexical Multi-Dimensional Analysis: Identifying Discourses and Ideologies. Cambridge University Press. https://www.cambridge.org/core/elements/lexical-multidimensional-analysis/B2321B62435360F4F7C4AF3F1CCF4E59
+
+A machine-readable citation is provided in CITATION.cff.
+
+## Third-party licenses
+
+This project uses PySide6/Qt (LGPLv3). When distributing binaries:
+- Bundle Qt as shared libraries (the default in common Python packagers).
+- Do not add technical measures preventing users from replacing the Qt libraries.
+- Include the LGPLv3 and Qt license texts in your distribution (e.g., in a licenses/ directory and reference them here).
+
+Other Python dependencies are under permissive licenses (MIT/BSD/Apache) unless noted.

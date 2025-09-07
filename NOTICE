@@ -1,0 +1,11 @@
+NOTICE
+
+This project is licensed under the Apache License, Version 2.0.
+
+Copyright (c) 2025 The Authors
+
+Preferred citation for related methodology/background:
+Berber Sardinha, T., & Fitzsimmons-Doolan, S. (2025). Lexical Multi-Dimensional Analysis: Identifying Discourses and Ideologies. Cambridge University Press. https://www.cambridge.org/core/elements/lexical-multidimensional-analysis/B2321B62435360F4F7C4AF3F1CCF4E59
+
+Third-party components:
+- PySide6 and Qt libraries are licensed under LGPLv3 (and other Qt licenses as applicable). Include their license texts with any binary distribution.
