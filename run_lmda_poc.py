@@ -37,18 +37,26 @@ def _run_gui():
     _ensure_local_package_on_path()
     try:
         from lmda_poc.gui_qt import launch_gui
-    except Exception as e:
+    except ImportError as e:
         print("ERROR: GUI dependencies missing. Ensure PySide6 and matplotlib are installed.")
         print(str(e))
+        return 1
+    except Exception:
+        print("ERROR while starting GUI:")
+        import traceback
+        traceback.print_exc()
         return 1
     return launch_gui()
 
 
 if __name__ == "__main__":
-    argv = sys.argv[1:]
-    if "--gui" in argv:
-        # Remove flag before passing to any CLI parsing
-        argv = [a for a in argv if a != "--gui"]
-        sys.exit(_run_gui())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gui", action="store_true", help="Launch the PySide6 GUI")
+    args = parser.parse_args()
+
+    if args.gui:
+        raise SystemExit(_run_gui())
     else:
-        sys.exit(_run_cli())
+        # Replace with your CLI entry point if you have one, e.g., _run_cli()
+        raise SystemExit(0)

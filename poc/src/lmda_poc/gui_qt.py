@@ -14,7 +14,7 @@ from .io_artifacts import write_docs_csv, write_tokens_csv, write_errors_csv, wr
 from .logging_setup import setup_logging
 
 # Qt imports used only in this GUI module
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtCore import Qt, Signal, QThread
 
 # Matplotlib with Qt backend
@@ -199,7 +199,8 @@ class MatplotlibWidget(QtWidgets.QWidget):
         layout.addWidget(self.canvas)
 
     def plot_top_tokens(self, tokens_rows: List[Dict[str, object]], top_n: int = 10):
-        ax = self.figure.clear().add_subplot(111)
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
         # Aggregate by lemma
         from collections import Counter
         c = Counter()
@@ -208,9 +209,18 @@ class MatplotlibWidget(QtWidgets.QWidget):
         top = c.most_common(top_n)
         labels = [f"{lem} ({pos})" for (lem, pos), _ in top]
         values = [val for _, val in top]
-        ax.bar(labels, values)
+
+        if not labels:
+            ax.text(0.5, 0.5, "No tokens to display", ha="center", va="center", fontsize=10, transform=ax.transAxes)
+            ax.set_axis_off()
+            self.canvas.draw_idle()
+            return
+
+        positions = list(range(len(labels)))
+        ax.bar(positions, values)
         ax.set_title("Top content tokens")
         ax.set_ylabel("Count")
+        ax.set_xticks(positions)
         ax.set_xticklabels(labels, rotation=45, ha='right')
         self.canvas.draw_idle()
 
@@ -277,7 +287,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _build_menu(self):
         m = self.menuBar().addMenu("Help")
-        about = QtWidgets.QAction("About / Licenses", self)
+        about = QtGui.QAction("About / Licenses", self)
         about.triggered.connect(self._show_about)
         m.addAction(about)
 

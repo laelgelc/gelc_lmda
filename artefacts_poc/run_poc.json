@@ -1,12 +1,12 @@
 {
   "run": {
-    "started_at": "2025-09-07T20:48:52Z",
-    "finished_at": "2025-09-07T20:48:53Z",
+    "started_at": null,
+    "finished_at": "2025-09-07T23:24:56Z",
     "status": "success",
     "seed": null
   },
   "environment": {
-    "started_at": "2025-09-07T20:48:52Z",
+    "started_at": null,
     "python": "3.12.11",
     "packages": {
       "spacy": "3.8.7",
@@ -15,7 +15,7 @@
   },
   "config_snapshot": {
     "input": {
-      "corpus_dir": "data\\fixture_corpus",
+      "corpus_dir": "C:\\Users\\eyamr\\PycharmProjects\\gelc_lmda\\data\\fixture_corpus",
       "encoding": "utf-8",
       "include_patterns": [
         "*.txt"
@@ -35,35 +35,29 @@
       "batch_size": 64
     },
     "output": {
-      "output_dir": "artefacts_poc"
+      "output_dir": "C:\\Users\\eyamr\\PycharmProjects\\gelc_lmda\\artefacts_poc"
     }
   },
   "inputs": {
-    "documents_scanned": 6,
-    "documents_processed": 6,
-    "categories": [
-      "blogs",
-      "news",
-      "reports"
-    ]
+    "documents_processed": 6
   },
   "artifacts": {
     "docs_csv": {
-      "path": "artefacts_poc\\docs.csv"
+      "path": "C:\\Users\\eyamr\\PycharmProjects\\gelc_lmda\\artefacts_poc\\docs.csv"
     },
     "tokens_table": {
-      "path": "artefacts_poc\\tokens.csv"
+      "path": "C:\\Users\\eyamr\\PycharmProjects\\gelc_lmda\\artefacts_poc\\tokens.csv"
     },
     "errors_csv": {
       "path": null
     },
     "log_file": {
-      "path": "artefacts_poc\\logs\\poc_run.log"
+      "path": "C:\\Users\\eyamr\\PycharmProjects\\gelc_lmda\\artefacts_poc\\logs\\poc_run.log"
     }
   },
   "timings_sec": {
-    "ingestion": 0.006,
-    "preprocessing": 0.393,
+    "ingestion": 0.0,
+    "preprocessing": 0.0,
     "export": 0.0
   }
 }
