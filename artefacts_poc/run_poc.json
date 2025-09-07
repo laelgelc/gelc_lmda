@@ -1,13 +1,13 @@
 {
   "run": {
-    "started_at": "2025-09-02T18:13:02Z",
-    "finished_at": "2025-09-02T18:13:03Z",
+    "started_at": "2025-09-07T20:48:52Z",
+    "finished_at": "2025-09-07T20:48:53Z",
     "status": "success",
     "seed": null
   },
   "environment": {
-    "started_at": "2025-09-02T18:13:02Z",
-    "python": "3.12.3",
+    "started_at": "2025-09-07T20:48:52Z",
+    "python": "3.12.11",
     "packages": {
       "spacy": "3.8.7",
       "model": "en_core_web_sm"
@@ -62,8 +62,8 @@
     }
   },
   "timings_sec": {
-    "ingestion": 0.003,
-    "preprocessing": 0.426,
+    "ingestion": 0.006,
+    "preprocessing": 0.393,
     "export": 0.0
   }
 }
