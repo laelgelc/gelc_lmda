@@ -1,7 +1,7 @@
 # PoC Specifications
 
 ## Command-line interface (CLI)
-CLI: lmda poc-preprocess
+CLI: lmda_poc
 
 Purpose: Ingest folder of .txt files, derive categories from subfolders, preprocess English with spaCy, filter to content-word lemmas, and write simple artefacts.
 
@@ -87,7 +87,7 @@ Exit codes
 ## Windows notes (PoC)
 - Use Python-based helpers for setup (e.g., creating the fixture corpus) to avoid shell incompatibilities.
 - Example invocation (PowerShell):
-  lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8
+  lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8
 
 ## Deterministic identifiers
 - doc_id: relative path from --input using forward slashes (e.g., blogs/blog_001.txt).
@@ -105,7 +105,7 @@ Exit codes
 - Namespacing:
     - Use the lmda_poc package name; do not import from future v0 modules.
 - CLI separation:
-    - Expose a PoC-only entrypoint (e.g., lmda poc-preprocess or python -m lmda_poc.cli).
+    - Expose a PoC-only entrypoint (e.g., lmda_poc or python -m lmda_poc.cli).
 - Configs and artifacts:
     - PoC reads poc/config.poc.yaml (not Slice v0 configs) and writes only to artefacts_poc/.
 - Tests and CI:
@@ -189,7 +189,7 @@ Exit codes
 
 ## Suggested CLI help text snippets
 - Example usage:
-    - lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc
+    - lmda_poc --input data/fixture_corpus --output artefacts_poc
 
 - English-only note:
     - PoC supports English only. If the model is unavailable, the command will exit with guidance to enable it in your environment.
@@ -216,7 +216,7 @@ Exit codes
 
 ## Definition of Done (PoC)
 - CLI runs end-to-end:
-  - lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
+  - lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
 - Outputs exist and are populated:
   - artefacts_poc/docs.csv, artefacts_poc/tokens.(csv|parquet), artefacts_poc/logs/poc_run.log, artefacts_poc/run_poc.json
 - Determinism and rules:
@@ -235,7 +235,7 @@ Exit codes
 # Ensure fixture corpus
 bash scripts/create_fixture_corpus.sh # or run the equivalent steps on your OS
 # Run PoC
-lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
+lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
 # Inspect outputs
 head -n 5 artefacts_poc/docs.csv
 head -n 5 artefacts_poc/tokens.csv # or open parquet if used

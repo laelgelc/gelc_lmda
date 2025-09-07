@@ -1,7 +1,7 @@
 # PoC Usage
 
 Run the PoC on the fixture corpus:
-- lmda poc-preprocess --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
+- lmda_poc --input data/fixture_corpus --output artefacts_poc --encoding utf-8 --keep-stopwords false
 
 Artifacts:
 - artefacts_poc/docs.csv

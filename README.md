@@ -45,6 +45,16 @@ bash head -n 5 artefacts/vocabulary.csv head -n 5 artefacts/factors_loadings.csv
 - artefacts/explained_variance.csv
 - artefacts/scree_plot.png  # or .svg per config
 
+## Run the PoC (CLI and GUI)
+
+- CLI (recommended for quick iterations)
+  - python run_lmda_poc.py --help
+  - python run_lmda_poc.py
+- GUI (PySide6)
+  - python run_lmda_poc.py --gui
+
+For developer details, packaging (PyInstaller), and troubleshooting, see docs/poc/ADD_GUI.md.
+
 ## License
 
 This project is licensed under the Apache License, Version 2.0. See the LICENSE file for details. A NOTICE file is included for attribution notices required by Apache-2.0.
