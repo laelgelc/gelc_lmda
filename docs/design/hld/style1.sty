@@ -1,4 +1,4 @@
-\ProvidesPackage{eyamrog}
+\ProvidesPackage{style1}
 
 \usepackage{import}
 %\usepackage{graphicx} % Required for inserting images
@@ -8,6 +8,7 @@
     \usetikzlibrary{matrix} % Enables multiple nodes inside a node
     \usetikzlibrary{decorations.pathreplacing}
     \usetikzlibrary{decorations.markings}
+    \usetikzlibrary{positioning}
 \usepackage{pgfplots}
     \pgfplotsset{compat=1.8}
 \usepackage{geometry} % Defines the page setup
@@ -31,14 +32,22 @@
 %\usepackage{lineno} % Use it to add line numbering
 %\linenumbers % Turns on line numbering
 %\usepackage{showframe} % Use it to check the document's page setup
+\usepackage{amsmath} % Enhances LaTeX's math typesetting capabilities
+\usepackage{amssymb} % Provides a broader symbol set for math typesetting
 \usepackage{lipsum} % Use it to generate text to help check the document's page setup
 \usepackage{blindtext} % Use it to generate text to help check the document's page setup
 \usepackage{url} % Allows URLs to be clickable
 \usepackage{hyperref} % Allows the use of hyperlinks (due to a known conflict, make sure it is loaded before 'abntex2cite')
-\usepackage[natbibapa]{apacite} % Use it to enable APA style
+%\usepackage[natbibapa]{apacite} % Use it to enable APA style with natbib
 %\usepackage[alf]{abntex2cite} % Use it to enable ABNT style
+\usepackage[style=apa]{biblatex} % Use it to enable APA style with BibLaTeX
+%\usepackage[style=chicago-authordate]{biblatex} % Use it to enable Chicago style with BibLaTeX
+    \DeclareLanguageMapping{english}{english-apa} % Use it to apply APA-specific language settings for English
+    %\DeclareLanguageMapping{english}{english-chicago} % Use it to apply Chicago-specific language settings for English
+    %\DeclareLanguageMapping{brazilian}{brazilian-apa} % Use it to apply APA-specific language settings for Brazilian Portuguese
+    %\DeclareLanguageMapping{brazilian}{brazilian-chicago} % Use it to apply Chicago-specific language settings for Brazilian Portuguese
+    \addbibresource{post-textual/library.bib} % Use it to add the bibliography database for BibLaTeX
 \usepackage[utf8]{inputenc} % Sets the document encoding to UTF8
-\renewcommand{\rmdefault}{\sfdefault} % Changes to sans serif typeface
 \usepackage[brazilian, english]{babel} % Sets multilingual support to 'brazilian' and 'english'
 \usepackage{caption} % Enables better management of captions
 \usepackage{float} % Enables better management of floating objects
@@ -48,7 +57,10 @@
 \usepackage{booktabs} % Enhances the quality of tables, providing extra commands as well as behind-the-scenes optimisation
 \usepackage{tipa} % Enables phonetic symbols (IPA)
 \usepackage{listings} % Enables computer code listing
+    \lstset{breaklines=true, breakatwhitespace=true, columns=fullflexible, postbreak=\mbox{\textcolor{lightgray}{$\hookrightarrow$}\space}}
 \usepackage[T1]{fontenc} % Switch the font encoding to T1, which provides support for the '\dh' command and other special characters
+\usepackage{lmodern}
+\renewcommand{\rmdefault}{\sfdefault} % Changes to sans serif typeface
 \renewcommand{\thesection}{\arabic{section}} % When using the 'report' document class without chapters, this setting removes the leading '0' on the numbering of sections
 \usepackage[export]{adjustbox} % Enables drawing a frame around the figures with the command '\fbox'
 \usepackage{multicol} % Enables the creation of columns of text
